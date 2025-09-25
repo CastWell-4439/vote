@@ -16,7 +16,7 @@ func Router() *gin.Engine {
 	router.Use(logger.LoggerToFile())
 	router.Use(logger.Recover)
 
-	rds, _ := redis.NewStore(10, "tcp", config.RedisAddress, "xxh2023gkpku", "secret")
+	rds, _ := redis.NewStore(10, "tcp", config.RedisAddress, "", "secret")
 	router.Use(sessions.Sessions("mysession", rds))
 
 	//该定义分组了
