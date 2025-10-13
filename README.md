@@ -55,7 +55,7 @@ go run start.go
 
 目录结构
 
-···plaintext
+```plaintext
 vote/
 ├── config/           # 配置文件（数据库、Redis等）
 │   ├── database.go   # MySQL连接配置
