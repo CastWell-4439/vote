@@ -1,1 +1,89 @@
-一个投票系统的后端
+项目简介
+这是一个基于 Go 语言开发的投票系统后端服务，提供用户管理等基础功能，可扩展实现投票相关核心业务逻辑。目前已实现用户的注册、登录、信息查询、新增、更新、删除等功能
+
+技术栈
+编程语言：Go 1.25.1
+Web 框架：Gin v1.11.0
+ORM 工具：GORM v1.31.0
+数据库：MySQL
+缓存 / 会话存储：Redis
+日志组件：标准库slog及自定义日志处理
+其他依赖：go-sql-driver/mysql、gin-contrib/sessions
+
+
+安装与部署
+1. 克隆项目
+   ```go
+   git clone <项目仓库地址>
+   cd vote/vote
+```
+
+2. 配置环境
+数据库配置
+修改 config/database.go 中的数据库连接信息，适配你的 MySQL 环境：
+```go
+// config/database.go
+username := "你的MySQL用户名"
+password := "你的MySQL密码"
+host := "MySQL主机地址"
+port := 3306 
+Dbname := "gorm" 
+timeout := "10s"
+```
+
+Redis 配置
+修改 config/redis.go 中的 Redis 地址
+
+```go
+// config/redis.go
+const (
+    RedisAddress = "localhost:6379" 
+)
+```
+
+3. 安装依赖
+```bash
+go mod tidy
+```
+
+4. 启动服务
+服务默认启动在 :8888 端口，可通过 http://localhost:8888 访问
+```bash
+go run start.go
+```
+
+
+目录结构
+
+···plaintext
+vote/
+├── config/           # 配置文件（数据库、Redis等）
+│   ├── database.go   # MySQL连接配置
+│   └── redis.go      # Redis地址配置
+├── controllers/      # 控制器（处理HTTP请求）
+│   ├── Register.go   # 注册/登录相关接口
+│   ├── user.go       # 用户CRUD接口
+│   └── return.go     # 统一响应格式
+├── dao/              # 数据访问层初始化
+│   └── dao.go
+├── logger/           # 日志处理
+│   └── logger.go     # 日志写入、中间件等
+├── model/            # 数据模型
+│   └── user.go       # 用户模型及数据库操作
+├── router/           # 路由配置
+│   └── router.go     # 路由注册及中间件
+├── start.go          # 程序入口
+├── go.mod            
+└── go.sum            
+```
+
+
+
+
+
+
+
+
+
+
+
