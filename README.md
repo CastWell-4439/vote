@@ -13,7 +13,7 @@ ORM 工具：GORM v1.31.0
 
 安装与部署
 1. 克隆项目
-   ```go
+   ```bash
    git clone <项目仓库地址>
    cd vote/vote
 ```
