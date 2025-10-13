@@ -21,6 +21,7 @@ ORM 工具：GORM v1.31.0
 2. 配置环境
 数据库配置
 修改 config/database.go 中的数据库连接信息，适配你的 MySQL 环境：
+
 ```go
 // config/database.go
 username := "你的MySQL用户名"
