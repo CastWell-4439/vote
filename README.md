@@ -78,6 +78,12 @@ vote/
 └── go.sum            
 ```
 
+2025/10/14 更新
+加入了shell脚本自动备份Mysql数据，源代码放在 /scripts/shell里了   
+
+加入了lua脚本实现投票的控制，在 /config/redis.go文件中加入了连接池，并且创建了controller/controller.go文件用于和lua交互
+
+lua源代码放在了 /scripts/lua中
 
 
 
