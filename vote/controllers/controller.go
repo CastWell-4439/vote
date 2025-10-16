@@ -35,8 +35,8 @@ func (v VoteController) Vote(ctx *gin.Context) {
 		return
 	}
 
-	itemKey := "vaote:count" + itemID
-	userKey := "vaote:count" + userID
+	itemKey := "vote:count" + itemID
+	userKey := "vote:count" + userID
 
 	conn := config.RedisPool.Get()
 	defer conn.Close()
