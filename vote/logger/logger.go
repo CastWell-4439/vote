@@ -96,6 +96,9 @@ func logToFile(level slog.Level, logName string, fields ...map[string]any) error
 // 这个函数是配置gin的日志，用结构化日志并且写入
 // 原来的方法有错，注释掉了
 func LoggerToFile() gin.HandlerFunc {
+	if err := setLogFile(); err != nil {
+		panic(fmt.Errorf("fail to create log file:%v", err))
+	}
 	// 按日期创建日志文件
 	times := time.Now().Format("2006-01-02")
 	filename := path.Join(logFileDir, fmt.Sprintf("%s.log", times))

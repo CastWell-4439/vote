@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"os"
-	"path/filepath"
 	"toupiao/config"
 	"toupiao/logger"
 
@@ -15,12 +14,14 @@ var VoteScipt *redis.Script
 type VoteController struct{}
 
 func init() {
-	scripthPath := filepath.Join("..", "scripts", "lua", "counter.lua")
-	scriptContent, err := os.ReadFile(scripthPath)
+	//用你自己的
+	//oops有两个vote我说怎么跑不了
+	scriptPath := "/home/castwell/vote/vote/scripts/lua/counter.lua"
+	scriptContent, err := os.ReadFile(scriptPath)
 	if err != nil {
 		logger.Fatal(gin.H{
 			"msg":   "fail to read file",
-			"path":  scripthPath,
+			"path":  scriptPath,
 			"error": err.Error(),
 		})
 	}
