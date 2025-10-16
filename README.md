@@ -83,7 +83,10 @@ vote/
 
 加入了lua脚本实现投票的控制，在 /config/redis.go文件中加入了连接池，并且创建了controller/controller.go文件用于和lua交互
 
-lua源代码放在了 /scripts/lua中
+lua源代码放在了 /scripts/lua中   
+
+2025/10/16 更新
+改了一点小错误，也修改了备份脚本
 
 
 
