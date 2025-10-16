@@ -48,17 +48,14 @@ func (u UserController) DeleteUser(c *gin.Context) {
 	ReturnSuccess(c, 0, "删除成功", true, 1)
 }
 
-func (u UserController) GetList(c *gin.Context) {
-	// defer func() {
-	// 	if err := recover(); err != nil {
-	// 		fmt.Println("捕获异常", err)
-	// 	}
-	// }()  上面的错误捕获代码，被router中的中间件代替了
-	num1 := 1
-	num2 := 0
-	num3 := num1 / num2
-	ReturnError(c, 4004, num3)
-}
+//func (u UserController) GetList(c *gin.Context) {
+//	// defer func() {
+//	// 	if err := recover(); err != nil {
+//	// 		fmt.Println("捕获异常", err)
+//	// 	}
+//	// }()  上面的错误捕获代码，被router中的中间件代替了
+//	ReturnError(c, 4004, num3)
+//}
 
 func (u UserController) GetUserListTest(c *gin.Context) {
 	users, err := model.GetUserListTest()
