@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -16,30 +17,36 @@ func (u UserController) Register(ctx *gin.Context) {
 	password := ctx.DefaultPostForm("password", "")
 	surepassword := ctx.DefaultPostForm("surepassword", "")
 
+	hashpassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		ReturnError(ctx, 400, gin.H{"error": "can't use this password"})
+		return
+	}
 	if username == "" || password == "" || surepassword == "" {
-		ctx.JSON(400, gin.H{"error": "mistake information"})
+		ReturnError(ctx, 400, gin.H{"error": "mistake information"})
 		return
 	}
 
 	if password != surepassword {
-		ctx.JSON(400, gin.H{"error": "make sure you input same password"})
+		ReturnError(ctx, 400, gin.H{"error": "make sure you input same password"})
 		return
 	}
 
 	user, err := model.GetUserData(username)
 
 	if user.Id != 0 {
-		ctx.JSON(400, gin.H{"error": "the user already exist"})
+		ReturnError(ctx, 400, gin.H{"error": "the user already exist"})
 		return
 	}
 
-	_, err = model.AddUser(username)
+	ifm, err := model.AddUser(username, string(hashpassword))
+
 	if err != nil {
-		ctx.JSON(400, gin.H{"error": "fail to create user"})
+		ReturnError(ctx, 400, gin.H{"error": "fail to create user"})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"succes": "OK"})
+	ReturnSuccess(ctx, 200, gin.H{"ok": "OK"}, ifm, 1)
 }
 
 func (u UserController) Login(ctx *gin.Context) {
@@ -47,18 +54,20 @@ func (u UserController) Login(ctx *gin.Context) {
 	password := ctx.DefaultPostForm("password", "")
 
 	if username == "" || password == "" {
-		ctx.JSON(4001, "input username or password")
+		ReturnError(ctx, 4001, gin.H{"error": "input username or password"})
 		return
 	}
 
 	ifm, _ := model.GetUserData(username)
 
-	if password != ifm.Password {
-		ctx.JSON(4004, "username or password wrong")
+	err := bcrypt.CompareHashAndPassword([]byte(ifm.Password), []byte(password))
+	if err != nil {
+		ReturnError(ctx, 4004, gin.H{"error": "username or password wrong"})
+		return
 	}
 
 	session := sessions.Default(ctx) //把用户信息存一下
 	session.Set("login:"+strconv.Itoa(ifm.Id), ifm.Id)
 	session.Save()
-	ctx.JSON(200, "perfect")
+	ReturnSuccess(ctx, 200, gin.H{"ok": "username or password wrong"}, ifm, 1)
 }

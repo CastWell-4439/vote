@@ -17,6 +17,7 @@ func Router() *gin.Engine {
 	router.Use(logger.Recover)
 
 	rds, _ := redis.NewStore(10, "tcp", config.RedisAddress, "", "secret")
+	rds.Options(sessions.Options{MaxAge: 3600})
 	router.Use(sessions.Sessions("mysession", rds))
 
 	//该定义分组了

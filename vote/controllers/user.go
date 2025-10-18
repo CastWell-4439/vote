@@ -21,7 +21,8 @@ func (u UserController) GetUserInfo(ctx *gin.Context) {
 // 调用models中user.go的添加方法,在数据库中添加数据
 func (u UserController) AddUser(c *gin.Context) {
 	username := c.DefaultPostForm("username", "")
-	id, err := model.AddUser(username)
+	password := c.DefaultPostForm("password", "")
+	id, err := model.AddUser(username, password)
 	if err != nil {
 		ReturnError(c, 4002, "保存错误")
 	}
@@ -48,14 +49,17 @@ func (u UserController) DeleteUser(c *gin.Context) {
 	ReturnSuccess(c, 0, "删除成功", true, 1)
 }
 
-//func (u UserController) GetList(c *gin.Context) {
-//	// defer func() {
-//	// 	if err := recover(); err != nil {
-//	// 		fmt.Println("捕获异常", err)
-//	// 	}
-//	// }()  上面的错误捕获代码，被router中的中间件代替了
-//	ReturnError(c, 4004, num3)
-//}
+func (u UserController) GetList(c *gin.Context) {
+	//defer func() {
+	//	if err := recover(); err != nil {
+	//		fmt.Println("捕获异常", err)
+	//	}
+	//} ()  上面的错误捕获代码，被router中的中间件代替了
+	num1 := 1
+	num2 := 0
+	num3 := num1 / num2
+	ReturnError(c, 4004, num3)
+}
 
 func (u UserController) GetUserListTest(c *gin.Context) {
 	users, err := model.GetUserListTest()

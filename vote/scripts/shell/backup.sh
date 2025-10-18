@@ -1,8 +1,9 @@
 #!/usr/bin/bash
 #本人的，你要是运行不了自己改
 
-#有错立即退出
-set -euo pipefail
+##有错立即退出
+#set -euo pipefail
+ #不直接退出是因为要分裂清理旧文件和备份过程，如果备份了但是没清理不要直接退出
 
 #配置
 BACKUP_DIR=$(cd "$(dirname "$0")/../vote/backup" && pwd)
@@ -23,6 +24,7 @@ echo "start to backup $DB_NAME"
 #命令行参数
 mysqldump -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_USERNAME" -p"$MYSQL_PASSWORD" --database "$DB_NAME" | gzip > "$BACKUP_FILE"
 #-f检查文件是否存在，du -b可以以字节为单位显示文件大小，cut -f1能提取第一列
+
 if [ -s "$BACKUP_FILE" ]; then
   echo "success to backup"
 else

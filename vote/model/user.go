@@ -27,8 +27,11 @@ func GetUserListTest() ([]User, error) {
 	return users, err
 }
 
-func AddUser(username string) (int, error) {
-	user := User{Username: username}
+func AddUser(username string, password string) (int, error) {
+	user := User{
+		Username: username,
+		Password: password,
+	}
 	err := config.DB.Create(&user).Error
 	return user.Id, err
 }
