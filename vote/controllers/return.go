@@ -22,7 +22,9 @@ func ReturnSuccess(c *gin.Context, code int, msg interface{}, data interface{}, 
 }
 
 // 返回json格式的错误信息，状态码200代表请求成功，即使返回的是错误信息
+//把返回错误的代码改为500方便前端区分了
+
 func ReturnError(c *gin.Context, code int, msg interface{}) {
 	json := &JsonErrStruct{Code: code, Msg: msg}
-	c.JSON(200, json)
+	c.JSON(500, json)
 }
