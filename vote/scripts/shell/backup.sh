@@ -56,34 +56,34 @@ DB_NAME=""
 REMAIN_DAY=""
 
 parse(){
-  while [[ $# -gt 0 ]];do
-    case $1 in
-      -c|--config)
-        CONFIG_FILE="$2"
-        shift 2
-        ;;
-      -e|--env)
-        load_from_env
-        shift
-        ;;
-      *)
-        echo "unknown command $1" >&2
-        exit 1
-        ;;
-    esac
-  done
+    while [[ $# -gt 0 ]];do
+      case $1 in
+        -c|--config)
+          CONFIG_FILE="$2"
+          shift 2
+          ;;
+        -e|--env)
+          load_from_env
+          shift
+          ;;
+        *)
+          echo "unknown command $1" >&2
+          exit 1
+          ;;
+      esac
+    done
 }
 
 #从环境变量加载
 load_from_env(){
 
-  BACKUP_DIR="${BACKUP_DIR:-$DEFAULT_BACKUP_DIR}"
-  MYSQL_HOST="${MYSQL_HOST:-localhost}"
-  MYSQL_PORT="${MYSQL_PORT:-3306}"
-  MYSQL_USER="${MYSQL_USER:-}"
-  MYSQL_PASSWORD="${MYSQL_PASSWORD:-}"
-  DB_NAME="${DB_NAME:-}"
-  REMAIN_DAY="${REMAIN_DAY:-$DEFAULT_REMAIN_DAY}"
+    BACKUP_DIR="${BACKUP_DIR:-$DEFAULT_BACKUP_DIR}"
+    MYSQL_HOST="${MYSQL_HOST:-localhost}"
+    MYSQL_PORT="${MYSQL_PORT:-3306}"
+    MYSQL_USER="${MYSQL_USER:-}"
+    MYSQL_PASSWORD="${MYSQL_PASSWORD:-}"
+    DB_NAME="${DB_NAME:-}"
+    REMAIN_DAY="${REMAIN_DAY:-$DEFAULT_REMAIN_DAY}"
 }
 
 # 从配置文件加载配置
@@ -133,24 +133,24 @@ load_from_config() {
 
 
 load_config(){
-      #优先命令行
-      if [[ -n "$CONFIG_FILE" ]]; then
-          load_from_config "$CONFIG_FILE"
-      fi
+    #优先命令行
+    if [[ -n "$CONFIG_FILE" ]]; then
+        load_from_config "$CONFIG_FILE"
+    fi
 
-      #否则从配置文件
-      if [[ -z "$CONFIG_FILE" && -f "$DEFAULT_CONFIG_FILE" ]]; then
-          load_from_config "$DEFAULT_CONFIG_FILE"
-      fi
+    #否则从配置文件
+    if [[ -z "$CONFIG_FILE" && -f "$DEFAULT_CONFIG_FILE" ]]; then
+        load_from_config "$DEFAULT_CONFIG_FILE"
+    fi
 
-      #不行就环境变量
-      load_from_env
+    #不行就环境变量
+    load_from_env
 
-      #最终设置
-      BACKUP_DIR="${BACKUP_DIR:-$DEFAULT_BACKUP_DIR}"
-      MYSQL_HOST="${MYSQL_HOST:-localhost}"
-      MYSQL_PORT="${MYSQL_PORT:-3306}"
-      REMAIN_DAY="${REMAIN_DAY:-$DEFAULT_REMAIN_DAY}"
+    #最终设置
+    BACKUP_DIR="${BACKUP_DIR:-$DEFAULT_BACKUP_DIR}"
+    MYSQL_HOST="${MYSQL_HOST:-localhost}"
+    MYSQL_PORT="${MYSQL_PORT:-3306}"
+    REMAIN_DAY="${REMAIN_DAY:-$DEFAULT_REMAIN_DAY}"
 }
 
 #检查依赖
@@ -173,9 +173,17 @@ create_backup_dir() {
 }
 
 backup(){
-    loacl backup_file="$BACKUP_DIR/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
-    local tmep=$(mktemp)
+    local backup_file="$BACKUP_DIR/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
+    local temp=$(mktemp)
     local flag=false
+
+    cat > "$temp" << EOF
+    [client]
+    host=$MYSQL_HOST
+    port=$MYSQL_PORT
+    user=$MYSQL_USER
+    password=$MYSQL_PASSWORD
+EOF
 
     #只有拥有者可以读写
     chmod 600 "$temp"
@@ -193,7 +201,7 @@ backup(){
 
     rm -f "$temp"
 
-    if [[ "$flag" != "true" ]] then
+    if [[ "$flag" != "true" ]]; then
         exit 1
     fi
 
@@ -207,7 +215,7 @@ clean() {
             echo "$deleted_files"
         else
             echo "no such files"
-        fi
+    fi
 }
 
 
