@@ -1,6 +1,7 @@
 package model
 
 import (
+	"time"
 	"toupiao/config"
 )
 
@@ -43,4 +44,22 @@ func UpdateUser(id int, username string) {
 func DeleteUser(id int) error {
 	err := config.DB.Delete(&User{}, id).Error
 	return err
+}
+
+type Record struct {
+	ID       int    `gorm:"primary_key"`
+	ItemID   string `gorm:"index"`
+	UserID   string `gorm:"index"`
+	VoteTime time.Time
+	IP       string
+}
+
+func Save(itemID, userID string, ip string, voteTime time.Time) error {
+	record := Record{
+		ItemID:   itemID,
+		UserID:   userID,
+		VoteTime: voteTime,
+		IP:       ip,
+	}
+	return config.DB.Create(&record).Error
 }

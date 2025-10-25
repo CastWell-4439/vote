@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"os"
+	"time"
 	"toupiao/config"
 	"toupiao/logger"
+	"toupiao/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gomodule/redigo/redis"
@@ -59,6 +61,17 @@ func (v VoteController) Vote(ctx *gin.Context) {
 		ReturnError(ctx, 400, "number of canshu error")
 	} else if result == 1 {
 		ReturnSuccess(ctx, 0, "OK", nil, 0)
+		vote := utils.Vote{
+			ID:       itemID,
+			UserID:   userID,
+			VoteTime: time.Now(),
+			IP:       ctx.ClientIP(),
+		}
+		go func() {
+			if err := utils.SendVote(vote); err != nil {
+				logger.Error(gin.H{"fail to send vote": err.Error()})
+			}
+		}()
 	} else {
 		ReturnError(ctx, 500, "unknown error")
 	}
