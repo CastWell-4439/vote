@@ -111,6 +111,7 @@ lua源代码放在了 /scripts/lua中
 加入了kafka
 
 
+呃之前忘记加了，此项目已使用go-zero进行重构（真省事），仓库地址：https://github.com/CastWell-4439/revote
 
 
 
